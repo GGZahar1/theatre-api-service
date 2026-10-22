@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "theatre",
     "rest_framework",
-    "user"
+    "user",
+    "debug_toolbar"
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "theatre_service.urls"
@@ -130,3 +132,8 @@ MAILERS = {
 }
 
 AUTH_USER_MODEL = "user.User"
+
+
+INTERNAL_IPS = [
+    "127.0.0.1"
+]
