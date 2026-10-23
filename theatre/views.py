@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.db.models import F, Count
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -39,7 +40,7 @@ class PlayViewSet(ModelViewSet):
             queryset = queryset.filter(actors__id__in=actors_ids)
 
         if genres:
-            genres_ids = [int(genre_id) for genre_id in actors.split(",")]
+            genres_ids = [int(genre_id) for genre_id in genres.split(",")]
             queryset = queryset.filter(genres__id__in=genres_ids)
 
         return queryset.distinct()
@@ -77,11 +78,19 @@ class PerformanceViewSet(ModelViewSet):
         queryset = self.queryset
 
         if date:
-            date = datetime.strptime(date, "%Y-%m-%d").date()
-            queryset = self.queryset.filter(show_time__date=date)
+            try:
+                date = datetime.strptime(date, "%Y-%m-%d").date()
+            except ValueError:
+                raise ValidationError("DATE must be in YYYY-MM-DD format")
+            queryset = queryset.filter(show_time__date=date)
 
         if play_id_str:
-            queryset = self.queryset.filter(play_id=int(play_id_str))
+            try:
+                play_id = int(play_id_str)
+            except ValueError:
+                raise ValidationError("Play ID must be an integer.")
+            queryset = queryset.filter(play_id=play_id)
+
 
         return queryset.distinct()
 
