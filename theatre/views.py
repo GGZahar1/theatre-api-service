@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db.models import F, Count
 from rest_framework import mixins
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
@@ -126,6 +127,13 @@ class PerformanceViewSet(ModelViewSet):
         return PerformanceSerializer
 
 
+class ReservationPagination(PageNumberPagination):
+    page_size = 3
+    page_query_param = "page"
+    page_size_query_param = "page_size"
+    max_page_size = 10
+
+
 class ReservationViewSet(
     GenericViewSet,
     mixins.ListModelMixin,
@@ -134,6 +142,7 @@ class ReservationViewSet(
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
     permission_classes = (IsAuthenticated,)
+    pagination_class = ReservationPagination
 
     def get_queryset(self):
         return Reservation.objects.filter(
