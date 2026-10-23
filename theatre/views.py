@@ -1,9 +1,9 @@
 from datetime import datetime
-
 from django.db.models import F, Count
+from rest_framework import mixins
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from theatre.models import Actor, Genre, Play, TheatreHall, Performance, Ticket, Reservation
 from theatre.serializers import ActorSerializer, GenreSerializer, PlaySerializer, PlayListSerializer, \
@@ -11,17 +11,30 @@ from theatre.serializers import ActorSerializer, GenreSerializer, PlaySerializer
     PerformanceRetrieveSerializer, ReservationSerializer, ReservationListSerializer
 
 
-class ActorViewSet(ModelViewSet):
+class ActorViewSet(
+    GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
 
 
-class GenreViewSet(ModelViewSet):
+class GenreViewSet(
+    GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
 
 
-class PlayViewSet(ModelViewSet):
+class PlayViewSet(
+    GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin
+):
     queryset = Play.objects.prefetch_related("genres", "actors")
     serializer_class = PlaySerializer
 
@@ -53,7 +66,11 @@ class PlayViewSet(ModelViewSet):
         return PlaySerializer
 
 
-class TheatreHallViewSet(ModelViewSet):
+class TheatreHallViewSet(
+    GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+):
     queryset = TheatreHall.objects.all()
     serializer_class = TheatreHallSerializer
 
@@ -102,7 +119,11 @@ class PerformanceViewSet(ModelViewSet):
         return PerformanceSerializer
 
 
-class ReservationViewSet(ModelViewSet):
+class ReservationViewSet(
+    GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
     permission_classes = (IsAuthenticated,)
