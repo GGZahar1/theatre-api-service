@@ -5,10 +5,18 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from theatre.models import Actor, Genre, Play, TheatreHall, Performance, Ticket, Reservation
-from theatre.serializers import ActorSerializer, GenreSerializer, PlaySerializer, PlayListSerializer, \
-    PlayRetrieveSerializer, TheatreHallSerializer, PerformanceSerializer, PerformanceListSerializer, \
-    PerformanceRetrieveSerializer, ReservationSerializer, ReservationListSerializer
+from theatre.models import (
+    Actor, Genre, Play, TheatreHall,
+    Performance, Reservation
+)
+from theatre.serializers import (
+    ActorSerializer, GenreSerializer,
+    PlaySerializer, PlayListSerializer,
+    PlayRetrieveSerializer, TheatreHallSerializer,
+    PerformanceSerializer, PerformanceListSerializer,
+    PerformanceRetrieveSerializer, ReservationSerializer,
+    ReservationListSerializer
+)
 
 
 class ActorViewSet(
@@ -107,7 +115,6 @@ class PerformanceViewSet(ModelViewSet):
             except ValueError:
                 raise ValidationError("Play ID must be an integer.")
             queryset = queryset.filter(play_id=play_id)
-
 
         return queryset.distinct()
 

@@ -3,7 +3,12 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
 
-from theatre.models import Actor, Genre, Play, TheatreHall, Performance, Reservation, Ticket
+from theatre.models import (
+    Actor, Genre,
+    Play, TheatreHall,
+    Performance, Reservation,
+    Ticket
+)
 
 
 class ActorSerializer(ModelSerializer):
@@ -87,8 +92,14 @@ class PerformanceSerializer(ModelSerializer):
 
 class PerformanceListSerializer(ModelSerializer):
     play_title = serializers.CharField(source="play.title", read_only=True)
-    theatre_hall_name = serializers.CharField(source="theatre_hall.name", read_only=True)
-    theatre_hall_capacity = serializers.IntegerField(source="theatre_hall.capacity", read_only=True)
+    theatre_hall_name = serializers.CharField(
+        source="theatre_hall.name",
+        read_only=True
+    )
+    theatre_hall_capacity = serializers.IntegerField(
+        source="theatre_hall.capacity",
+        read_only=True
+    )
     tickets_available = serializers.IntegerField(read_only=True)
 
     class Meta:
@@ -115,7 +126,11 @@ class TicketSeatsSerializer(ModelSerializer):
 class PerformanceRetrieveSerializer(ModelSerializer):
     play = PlayListSerializer(read_only=True, many=False)
     theatre_hall = TheatreHallSerializer(read_only=True, many=False)
-    taken_places = TicketSeatsSerializer(source="tickets",read_only=True, many=True)
+    taken_places = TicketSeatsSerializer(
+        source="tickets",
+        read_only=True,
+        many=True
+    )
 
     class Meta:
         model = Performance
@@ -155,6 +170,7 @@ class TicketListSerializer(TicketSerializer):
 
 class ReservationSerializer(ModelSerializer):
     tickets = TicketSerializer(many=True, read_only=False, allow_empty=False)
+
     class Meta:
         model = Reservation
         fields = (
