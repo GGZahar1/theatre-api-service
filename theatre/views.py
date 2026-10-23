@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.db.models import F, Count
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from theatre.models import Actor, Genre, Play, TheatreHall, Performance, Ticket, Reservation
@@ -95,6 +96,7 @@ class PerformanceViewSet(ModelViewSet):
 class ReservationViewSet(ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Reservation.objects.filter(
