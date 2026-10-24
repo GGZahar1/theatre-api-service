@@ -1,4 +1,8 @@
+import os
+import uuid
+
 from django.db import models
+from django.utils.text import slugify
 from rest_framework.exceptions import ValidationError
 
 from theatre_service import settings
@@ -23,11 +27,20 @@ class Genre(models.Model):
         return f"{self.name}"
 
 
+def create_custom_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    return os.path.join(
+        "uploads/images/",
+        f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
+    )
+
+
 class Play(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     actors = models.ManyToManyField(Actor, related_name="actors")
     genres = models.ManyToManyField(Genre, related_name="genres")
+    image = models.ImageField(null=True, upload_to=create_custom_path)
 
     def __str__(self):
         return f"{self.title}"

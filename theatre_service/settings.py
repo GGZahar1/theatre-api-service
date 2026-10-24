@@ -121,7 +121,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = "static/"
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -156,9 +157,9 @@ REST_FRAMEWORK = {
         "user": "45/minute",
     },
     "DEFAULT_PAGINATION_CLASS": (
-        "rest_framework.pagination.PageNumberPagination",
+        "rest_framework.pagination.PageNumberPagination"
     ),
-    "PAGE_SIZE": 10
+    "PAGE_SIZE": 10,
 }
 
 SIMPLE_JWT = {
