@@ -30,8 +30,7 @@ class Genre(models.Model):
 def create_custom_path(instance, filename):
     _, extension = os.path.splitext(filename)
     return os.path.join(
-        "uploads/images/",
-        f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
+        "uploads/images/", f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
     )
 
 
@@ -60,14 +59,9 @@ class TheatreHall(models.Model):
 
 
 class Performance(models.Model):
-    play = models.ForeignKey(
-        Play, related_name="play",
-        on_delete=models.CASCADE
-    )
+    play = models.ForeignKey(Play, related_name="play", on_delete=models.CASCADE)
     theatre_hall = models.ForeignKey(
-        TheatreHall,
-        on_delete=models.CASCADE,
-        related_name="performance"
+        TheatreHall, on_delete=models.CASCADE, related_name="performance"
     )
     show_time = models.DateTimeField()
 
@@ -91,14 +85,10 @@ class Ticket(models.Model):
     row = models.IntegerField()
     seat = models.IntegerField()
     performance = models.ForeignKey(
-        Performance,
-        on_delete=models.CASCADE,
-        related_name="tickets"
+        Performance, on_delete=models.CASCADE, related_name="tickets"
     )
     reservation = models.ForeignKey(
-        Reservation,
-        on_delete=models.CASCADE,
-        related_name="tickets"
+        Reservation, on_delete=models.CASCADE, related_name="tickets"
     )
 
     @staticmethod
@@ -111,11 +101,10 @@ class Ticket(models.Model):
             if not (1 <= ticket_attr_value <= count_attrs):
                 raise error_to_raise(
                     {
-                        ticket_attr_name:
-                            f"{ticket_attr_name} "
-                            f"number must be in available range: "
-                            f"(1, {theatre_hall_attr_name}): "
-                            f"(1, {count_attrs})"
+                        ticket_attr_name: f"{ticket_attr_name} "
+                        f"number must be in available range: "
+                        f"(1, {theatre_hall_attr_name}): "
+                        f"(1, {count_attrs})"
                     }
                 )
 
@@ -128,25 +117,23 @@ class Ticket(models.Model):
         )
 
     def save(
-            self,
-            *args,
-            force_insert=False,
-            force_update=False,
-            using=None,
-            update_fields=None,
+        self,
+        *args,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
     ):
         self.full_clean()
         return super(Ticket, self).save(
             force_insert=force_insert,
             force_update=force_update,
             using=using,
-            update_fields=update_fields
+            update_fields=update_fields,
         )
 
     def __str__(self):
-        return (
-            f"{str(self.performance)} (row: {self.row}, seat: {self.seat})"
-        )
+        return f"{str(self.performance)} (row: {self.row}, seat: {self.seat})"
 
     class Meta:
         unique_together = ("performance", "row", "seat")
