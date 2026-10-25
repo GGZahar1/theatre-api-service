@@ -118,13 +118,23 @@ class PerformanceRetrieveSerializer(ModelSerializer):
 
 class TicketSerializer(ModelSerializer):
     def validate(self, attrs):
-        data = super(TicketSerializer, self).validate(attrs=attrs)
-        Ticket.validate_ticket(
-            attrs["row"],
-            attrs["seat"],
-            attrs["performance"].theatre_hall,
-            ValidationError,
+        data = super().validate(attrs=attrs)
+
+        row = attrs.get("row", self.instance.row if self.instance else None)
+        seat = attrs.get("seat", self.instance.seat if self.instance else None)
+        performance = attrs.get(
+            "performance",
+            self.instance.performance if self.instance else None,
         )
+
+        if row is not None and seat is not None and performance is not None:
+            Ticket.validate_ticket(
+                row,
+                seat,
+                performance.theatre_hall,
+                ValidationError,
+            )
+
         return data
 
     class Meta:
