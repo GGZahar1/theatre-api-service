@@ -24,7 +24,7 @@ class UnauthenticatedActorApiTest(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-    def get_unauthenticated_user(self):
+    def test_get_actor_list_unauthenticated(self):
         res = self.client.get(ACTOR_URL)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
