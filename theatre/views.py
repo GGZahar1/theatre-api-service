@@ -79,6 +79,8 @@ class PlayViewSet(
             return PlayListSerializer
         elif self.action == "retrieve":
             return PlayRetrieveSerializer
+        elif self.action == "upload-image":
+            return PlayImageSerializer
         return PlaySerializer
 
     @extend_schema(
@@ -107,6 +109,19 @@ class PlayViewSet(
     )
     def list(self, request):
         return super().list(request)
+
+    @action(
+        methods=["POST"],
+        detail=True,
+        url_path="upload-image",
+        permission_classes=[IsAdminUser],
+    )
+    def upload_image(self, request, pk=None):
+        play = self.get_object()
+        serializer = self.get_serializer(play, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TheatreHallViewSet(
@@ -153,8 +168,6 @@ class PerformanceViewSet(ModelViewSet):
             return PerformanceListSerializer
         elif self.action == "retrieve":
             return PerformanceRetrieveSerializer
-        elif self.action == "upload-image":
-            return PlayImageSerializer
         return PerformanceSerializer
 
     @extend_schema(
@@ -176,19 +189,6 @@ class PerformanceViewSet(ModelViewSet):
 
     def list(self, request):
         return super().list(request)
-
-    @action(
-        methods=["POST"],
-        detail=True,
-        url_path="upload-image",
-        permission_classes=[IsAdminUser],
-    )
-    def upload_image(self, request, pk=None):
-        play = self.get_object()
-        serializer = self.get_serializer(play, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ReservationPagination(PageNumberPagination):
