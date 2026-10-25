@@ -30,7 +30,8 @@ class Genre(models.Model):
 def create_custom_path(instance, filename):
     _, extension = os.path.splitext(filename)
     return os.path.join(
-        "uploads/images/", f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
+        "uploads/images/",
+        f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
     )
 
 
@@ -59,7 +60,11 @@ class TheatreHall(models.Model):
 
 
 class Performance(models.Model):
-    play = models.ForeignKey(Play, related_name="play", on_delete=models.CASCADE)
+    play = models.ForeignKey(
+        Play,
+        related_name="play",
+        on_delete=models.CASCADE
+    )
     theatre_hall = models.ForeignKey(
         TheatreHall, on_delete=models.CASCADE, related_name="performance"
     )

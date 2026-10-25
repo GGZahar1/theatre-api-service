@@ -13,7 +13,10 @@ PERFORMANCE_URL = reverse("theatre:performance-list")
 def create_play(**params):
     defaults = {
         "title": "Hamlet",
-        "description": "Prince Hamlet seeks revenge for his father's murder and struggles with betrayal, justice, and death.",
+        "description":
+            "Prince Hamlet seeks revenge"
+            " for his father's murder and"
+            " struggles with betrayal, justice, and death.",
     }
     defaults.update(params)
     return Play.objects.create(**defaults)
@@ -89,8 +92,10 @@ class AuthenticatedPlayApiTests(TestCase):
         res = self.client.post(
             PLAY_URL,
             data={
-                "title": "Hamlet",
-                "description": "Prince Hamlet seeks revenge for his father's murder and struggles with betrayal, justice, and death.",
+                "title":
+                    "Hamlet", "description": "Prince Hamlet seeks"
+                    " revenge for his father's murder and"
+                    " struggles with betrayal, justice, and death.",
             },
             format="json"
         )
@@ -110,7 +115,10 @@ class AuthenticatedPlayApiTests(TestCase):
             PLAY_URL,
             data={
                 "title": "Hamlet",
-                "description": "Prince Hamlet seeks revenge for his father's murder and struggles with betrayal, justice, and death.",
+                "description": "Prince Hamlet seeks revenge"
+                               " for his father's murder and"
+                               " struggles with betrayal,"
+                               " justice, and death.",
                 "actors": [actor.id,],
                 "genres": [genre.id,],
             },

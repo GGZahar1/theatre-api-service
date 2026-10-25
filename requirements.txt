@@ -10,6 +10,7 @@ django-debug-toolbar==8.0.0
 djangorestframework==3.18.3
 djangorestframework_simplejwt==5.5.1
 docker==7.2.0
+dotenv==0.9.9
 drf-spectacular==0.30.0
 flake8==7.4.1
 idna==3.20
@@ -27,6 +28,7 @@ psycopg-binary==3.3.6
 pycodestyle==2.15.0
 pyflakes==4.0.3
 PyJWT==2.15.1
+python-dotenv==1.2.4
 pytokens==0.4.1
 PyYAML==6.0.3
 referencing==0.37.0
