@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     "theatre",
     "rest_framework",
     "user",
-    "debug_toolbar",
     "rest_framework_simplejwt",
     "drf_spectacular",
 ]
@@ -60,7 +59,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "theatre_service.urls"
@@ -149,7 +147,7 @@ MAILERS = {
 AUTH_USER_MODEL = "user.User"
 
 
-INTERNAL_IPS = ["*"]
+INTERNAL_IPS = ["127.0.0.1"]
 
 
 REST_FRAMEWORK = {
@@ -185,3 +183,15 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
 }
 
+
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
+
+
+if DEBUG:
+    MIDDLEWARE.insert(
+        MIDDLEWARE.index(
+            "django.middleware.common.CommonMiddleware"
+        ) + 1,
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    )
