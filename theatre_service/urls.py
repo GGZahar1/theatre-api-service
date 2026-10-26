@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-import debug_toolbar
+from rest_framework.permissions import IsAdminUser
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
@@ -31,16 +31,27 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/theatre/", include("theatre.urls", namespace="theatre")),
     path("api/user/", include("user.urls", namespace="user")),
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    # Optional UI:
+    path(
+        "api/schema/",
+        SpectacularAPIView.as_view(
+            permission_classes=[IsAdminUser],
+        ),
+         name="schema"
+    ),
     path(
         "api/schema/swagger-ui/",
-        SpectacularSwaggerView.as_view(url_name="schema"),
+        SpectacularSwaggerView.as_view(
+            url_name="schema",
+            permission_classes=[IsAdminUser],
+        ),
         name="swagger-ui",
     ),
     path(
         "api/schema/redoc/",
-        SpectacularRedocView.as_view(url_name="schema"),
+        SpectacularRedocView.as_view(
+            url_name="schema",
+            permission_classes=[IsAdminUser],
+        ),
         name="redoc",
     ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
