@@ -39,8 +39,8 @@ def create_custom_path(instance, filename):
 class Play(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    actors = models.ManyToManyField(Actor, related_name="actors")
-    genres = models.ManyToManyField(Genre, related_name="genres")
+    actors = models.ManyToManyField(Actor, related_name="actor_plays")
+    genres = models.ManyToManyField(Genre, related_name="genre_plays")
     image = models.ImageField(null=True, upload_to=create_custom_path)
 
     def __str__(self):
