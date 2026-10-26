@@ -15,6 +15,7 @@ from theatre.models import (
     Play, TheatreHall,
     Performance, Reservation
     )
+from theatre.permissions import IsAdminOrIfAuthenticatedReadOnly
 from theatre.serializers import (
     ActorSerializer,
     GenreSerializer,
@@ -38,6 +39,7 @@ class ActorViewSet(
 ):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
+    permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
 
 
 class GenreViewSet(
@@ -47,6 +49,7 @@ class GenreViewSet(
 ):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
 
 
 class PlayViewSet(
@@ -135,6 +138,7 @@ class TheatreHallViewSet(
 ):
     queryset = TheatreHall.objects.all()
     serializer_class = TheatreHallSerializer
+    permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
 
 
 class PerformanceViewSet(ModelViewSet):
@@ -147,6 +151,7 @@ class PerformanceViewSet(ModelViewSet):
             - Count("tickets")
         )
     )
+    permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
     serializer_class = PerformanceSerializer
 
     def get_queryset(self):
