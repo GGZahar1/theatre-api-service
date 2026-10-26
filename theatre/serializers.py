@@ -172,6 +172,35 @@ class ReservationSerializer(ModelSerializer):
                 Ticket.objects.create(reservation=reservation, **ticket_data)
             return reservation
 
+    def validate_tickets(self, value):
+        performances = {ticket["performance"] for ticket in value}
+        if len(performances) > 1:
+            raise ValidationError(
+                "All tickets must be for the same performance."
+            )
+        if not performances:
+            raise serializers.ValidationError("At least one ticket is required.")
+
+        seats = [(t["row"], t["seat"]) for t in value]
+
+        if len(seats) != len(set(seats)):
+            raise ValidationError(
+                "You have duplicate seats in your request."
+            )
+
+        performance = performances.pop()
+        for row, seat in seats:
+            if Ticket.objects.filter(
+                performance=performance,
+                row=row,
+                seat=seat,
+            ).exists():
+                raise ValidationError(
+                    f"Seat {row}-{seat} is already taken for this performance."
+                )
+
+        return value
+
 
 class ReservationListSerializer(ReservationSerializer):
     tickets = TicketListSerializer(many=True, read_only=True)
