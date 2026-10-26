@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
@@ -72,6 +73,16 @@ class PerformanceSerializer(ModelSerializer):
     class Meta:
         model = Performance
         fields = ("id", "show_time", "play", "theatre_hall")
+
+    def validate_show_time(self, value):
+        if self.instance and self.instance.show_time == value:
+            return value
+
+        if value < timezone.now():
+            raise ValidationError(
+               "The performance time cannot be in the past."
+            )
+        return value
 
 
 class PerformanceListSerializer(ModelSerializer):
