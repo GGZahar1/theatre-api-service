@@ -4,7 +4,7 @@ import uuid
 from django.db import models
 from django.utils.text import slugify
 from rest_framework.exceptions import ValidationError
-from django.core.validators import MinValueValidator, MinLengthValidator
+from django.core.validators import MinValueValidator
 
 from theatre_service import settings
 
@@ -49,8 +49,8 @@ class Play(models.Model):
 
 class TheatreHall(models.Model):
     name = models.CharField(max_length=255)
-    rows = models.IntegerField(validators=[MinLengthValidator(1)])
-    seats_in_row = models.IntegerField(validators=[MinLengthValidator(1)])
+    rows = models.IntegerField(validators=[MinValueValidator(1)])
+    seats_in_row = models.IntegerField(validators=[MinValueValidator(1)])
 
     @property
     def capacity(self):
