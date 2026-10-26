@@ -36,6 +36,7 @@ class ActorViewSet(
     GenericViewSet,
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
+    mixins.UpdateModelMixin
 ):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
@@ -46,6 +47,7 @@ class GenreViewSet(
     GenericViewSet,
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
+    mixins.UpdateModelMixin
 ):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
@@ -135,6 +137,7 @@ class TheatreHallViewSet(
     GenericViewSet,
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
+    mixins.UpdateModelMixin
 ):
     queryset = TheatreHall.objects.all()
     serializer_class = TheatreHallSerializer

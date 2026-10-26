@@ -76,3 +76,31 @@ class AuthenticatedActorApiTests(TestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Actor.objects.count(), 1)
+
+    def test_update_actor_as_non_admin(self):
+        actor = create_actor()
+        res = self.client.patch(
+            reverse("theatre:actor-detail", args=[actor.id]),
+            data={
+                "first_name": "Test"
+            },
+            format="json"
+        )
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_actor_as_admin(self):
+        admin = get_user_model().objects.create_superuser(
+            email="admin123@gmail.com",
+            password="password"
+        )
+        self.client.force_authenticate(user=admin)
+        actor = create_actor()
+        res = self.client.patch(
+            reverse("theatre:actor-detail", args=[actor.id]),
+            data={
+                "first_name": "Test"
+            },
+            format="json"
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["first_name"], "Test")

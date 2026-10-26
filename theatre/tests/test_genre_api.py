@@ -71,3 +71,31 @@ class AuthenticatedGenreAPiTests(TestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Genre.objects.count(), 1)
+
+    def test_update_actor_as_non_admin(self):
+        genre = create_genre()
+        res = self.client.patch(
+            reverse("theatre:genre-detail", args=[genre.id]),
+            data={
+                "name": "Tragedy"
+            },
+            format="json"
+        )
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_actor_as_admin(self):
+        admin = get_user_model().objects.create_superuser(
+            email="admin123@gmail.com",
+            password="password"
+        )
+        self.client.force_authenticate(user=admin)
+        genre = create_genre()
+        res = self.client.patch(
+            reverse("theatre:genre-detail", args=[genre.id]),
+            data={
+                "name": "Tragedy"
+            },
+            format="json"
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["name"], "Tragedy")
